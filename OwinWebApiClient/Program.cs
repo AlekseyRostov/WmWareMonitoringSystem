@@ -12,50 +12,53 @@ namespace OwinWebApiClient
         {
             try
             {
-                Console.WriteLine("Read all the companies...");
-                var companyClient = new CompanyClient("http://localhost:8080");
-                var companies = companyClient.GetCompanies();
-                WriteCompaniesList(companies);
-
-                var nextId = (from c in companies select c.Id).Max() + 1;
-
-                Console.WriteLine("Add a new company...");
-                var result = companyClient.AddCompany(
-                    new Company
-                    {
-                        Id = nextId,
-                        Name = string.Format("New Company #{0}", nextId)
-                    });
-                WriteStatusCodeResult(result);
-
-                Console.WriteLine("Updated List after Add:");
-                companies = companyClient.GetCompanies();
-                WriteCompaniesList(companies);
-
-                Console.WriteLine("Update a company...");
-                var updateMe = companyClient.GetCompany(nextId);
-                updateMe.Name = string.Format("Updated company #{0}", updateMe.Id);
-                result = companyClient.UpdateCompany(updateMe);
-                WriteStatusCodeResult(result);
-
-                Console.WriteLine("Updated List after Update:");
-                companies = companyClient.GetCompanies();
-                WriteCompaniesList(companies);
-
-                Console.WriteLine("Delete a company...");
-                result = companyClient.DeleteCompany(nextId - 1);
-                WriteStatusCodeResult(result);
-
-                Console.WriteLine("Updated List after Delete:");
-                companies = companyClient.GetCompanies();
-                WriteCompaniesList(companies);
-
-                Console.Read();
+                Run();
             }
             catch (Exception)
             {
                 throw;
             }
+        }
+
+        private static void Run()
+        {
+            Console.WriteLine("Read all the companies...");
+            var companyClient = new CompanyClient("http://localhost:8080");
+            var companies = companyClient.GetCompanies();
+            WriteCompaniesList(companies);
+
+            var nextId = (from c in companies select c.Id).Max() + 1;
+
+            Console.WriteLine("Add a new company...");
+            var result = companyClient.AddCompany(new Company
+            {
+                Name = string.Format("New Company #{0}", nextId)
+            });
+            WriteStatusCodeResult(result);
+
+            Console.WriteLine("Updated List after Add:");
+            companies = companyClient.GetCompanies();
+            WriteCompaniesList(companies);
+
+            Console.WriteLine("Update a company...");
+            var updateMe = companyClient.GetCompany(nextId);
+            updateMe.Name = string.Format("Updated company #{0}", updateMe.Id);
+            result = companyClient.UpdateCompany(updateMe);
+            WriteStatusCodeResult(result);
+
+            Console.WriteLine("Updated List after Update:");
+            companies = companyClient.GetCompanies();
+            WriteCompaniesList(companies);
+
+            Console.WriteLine("Delete a company...");
+            result = companyClient.DeleteCompany(nextId - 1);
+            WriteStatusCodeResult(result);
+
+            Console.WriteLine("Updated List after Delete:");
+            companies = companyClient.GetCompanies();
+            WriteCompaniesList(companies);
+
+            Console.Read();
         }
 
         private static void WriteCompaniesList(IEnumerable<Company> companies)
