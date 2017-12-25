@@ -34,13 +34,14 @@ namespace OwinWebApiClient
             var provider = new ApiClientProvider(hostUriString);
             string _accessToken;
             Dictionary<string, string> _tokenDictionary;
-
             try
             {
                 // Pass in the credentials and retrieve a token dictionary:
-                _tokenDictionary =
-                    await provider.GetTokenDictionary("john@example.com", "password");
+                _tokenDictionary = await provider.GetTokenDictionary(
+                    "john@example.com", "JohnsPassword");
                 _accessToken = _tokenDictionary["access_token"];
+                /*_tokenDictionary = await provider.GetTokenDictionary("jimi@example.com", "JimisPassword");
+                _accessToken = _tokenDictionary["access_token"];*/
 
                 // Write the contents of the dictionary:
                 foreach (var kvp in _tokenDictionary)

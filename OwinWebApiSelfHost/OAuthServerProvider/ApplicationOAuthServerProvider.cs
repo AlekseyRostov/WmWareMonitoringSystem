@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Owin.Security.OAuth;
+using OwinWebApiSelfHost.Model;
 
 namespace OwinWebApiSelfHost.OAuthServerProvider
 {
@@ -15,11 +16,14 @@ namespace OwinWebApiSelfHost.OAuthServerProvider
             await Task.FromResult(context.Validated());
         }
 
-        public override async Task GrantResourceOwnerCredentials(
-            OAuthGrantResourceOwnerCredentialsContext context)
+        public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
-            // DEMO ONLY: Pretend we are doing some sort of REAL checking here:
-            if (context.Password != "password")
+            // Retrieve user from database:
+            var store = new MyUserStore(new ApplicationDbContext());
+            var user = await store.FindByEmailAsync(context.UserName);
+
+            // Validate user/password:
+            if (user == null || !store.PasswordIsValid(user, context.Password))
             {
                 context.SetError(
                     "invalid_grant", "The user name or password is incorrect.");
@@ -27,16 +31,12 @@ namespace OwinWebApiSelfHost.OAuthServerProvider
                 return;
             }
 
-            // Create or retrieve a ClaimsIdentity to represent the 
-            // Authenticated user:
-            ClaimsIdentity identity = new ClaimsIdentity(context.Options.AuthenticationType);
-            identity.AddClaim(new Claim("user_name", context.UserName));
+            var identity = new ClaimsIdentity(context.Options.AuthenticationType);
+            foreach (var userClaim in user.Claims)
+            {
+                identity.AddClaim(new Claim(userClaim.ClaimType, userClaim.ClaimValue));
+            }
 
-            // Add a Role Claim:
-            identity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
-
-            // Identity info will ultimatly be encoded into an Access Token
-            // as a result of this call:
             context.Validated(identity);
         }
     }
