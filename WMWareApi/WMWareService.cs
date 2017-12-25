@@ -60,6 +60,9 @@ namespace WMWareApi
                 VirtualMachine vm = GetVirtualMachineByName(vmName);
                 if(vm == null) throw new ArgumentNullException("VM not found");
 
+                //HostSystem host = (HostSystem) _client.GetView(vm.Runtime.Host, null);
+                //var xx = host.Config.FileSystemVolume;
+
                 VirtualMachineInfo vmInfo = new VirtualMachineInfo();
                 vmInfo.Name = vm.Name;
                 vmInfo.VirtualDisks = new List<VirtualDiskInfo>();

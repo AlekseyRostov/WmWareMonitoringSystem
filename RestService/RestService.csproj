@@ -140,10 +140,6 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Model\Model.csproj">
-      <Project>{5e481c83-dc28-433b-8a2c-2d162271268b}</Project>
-      <Name>Model</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WMWareApi\WMWareApi.csproj">
       <Project>{cd14da32-9fdd-40d0-b47a-506fbe7bf0b1}</Project>
       <Name>WMWareApi</Name>

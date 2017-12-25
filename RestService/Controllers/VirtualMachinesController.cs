@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
-using Model;
-using RestService.Utils;
 using WMWareApi;
 using WMWareApi.Model;
 
@@ -30,10 +28,6 @@ namespace RestService.Controllers
             _vmWareService = new WMWareService(serviceUrl, userName, password);
             VirtualMachineInfo vmInfo = _vmWareService.GetVirtualMachineInfo(id);
             if (vmInfo == null) return NotFound();
-
-            //VmInfoDto result = new VmInfoDto();
-            //VirtualMachineInfo result1 = new VirtualMachineInfo();
-            //vmInfo.CopyPublicPropertyTo(result1);
             return Ok(vmInfo);
         }
         
