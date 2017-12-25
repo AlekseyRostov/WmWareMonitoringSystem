@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiClientProvider.cs" />
     <Compile Include="CompanyClient.cs" />
     <Compile Include="Model\Company.cs" />
     <Compile Include="Program.cs" />

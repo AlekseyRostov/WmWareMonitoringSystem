@@ -1,16 +1,35 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
+using Microsoft.Owin;
+using Microsoft.Owin.Security.OAuth;
 using Owin;
+using OwinWebApiSelfHost.OAuthServerProvider;
 
 namespace OwinWebApiSelfHost
 {
     public class Startup
     {
+        // This method is required by Katana:
         public void Configuration(IAppBuilder app)
         {
+            ConfigureAuth(app);
             var webApiConfiguration = ConfigureWebApi();
-
-            // Use the extension method provided by the WebApi.Owin library:
             app.UseWebApi(webApiConfiguration);
+        }
+
+        private void ConfigureAuth(IAppBuilder app)
+        {
+            var OAuthOptions = new OAuthAuthorizationServerOptions
+            {
+                TokenEndpointPath = new PathString("/Token"),
+                Provider = new ApplicationOAuthServerProvider(),
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
+
+                // Only do this for demo!!
+                AllowInsecureHttp = true
+            };
+            app.UseOAuthAuthorizationServer(OAuthOptions);
+            app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
         }
 
         private HttpConfiguration ConfigureWebApi()

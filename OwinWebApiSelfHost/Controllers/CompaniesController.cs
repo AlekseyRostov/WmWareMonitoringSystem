@@ -7,6 +7,7 @@ using OwinWebApiSelfHost.Model;
 
 namespace OwinWebApiSelfHost.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CompaniesController : ApiController
     {
         private readonly ApplicationDbContext _Db = new ApplicationDbContext();

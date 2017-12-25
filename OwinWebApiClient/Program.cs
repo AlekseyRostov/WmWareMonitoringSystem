@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using OwinWebApiClient.Model;
 
 namespace OwinWebApiClient
@@ -12,7 +13,13 @@ namespace OwinWebApiClient
         {
             try
             {
-                Run();
+                // Wait for the async stuff to run...
+                Run().Wait();
+
+                // Then Write Done...
+                Console.WriteLine("");
+                Console.WriteLine("Done! Press the Enter key to Exit...");
+                Console.ReadLine();
             }
             catch (Exception)
             {
@@ -20,45 +27,82 @@ namespace OwinWebApiClient
             }
         }
 
-        private static void Run()
+        private static async Task Run()
         {
-            Console.WriteLine("Read all the companies...");
-            var companyClient = new CompanyClient("http://localhost:8080");
-            var companies = companyClient.GetCompanies();
-            WriteCompaniesList(companies);
+            // Create an http client provider:
+            string hostUriString = "http://localhost:8080";
+            var provider = new ApiClientProvider(hostUriString);
+            string _accessToken;
+            Dictionary<string, string> _tokenDictionary;
 
-            var nextId = (from c in companies select c.Id).Max() + 1;
-
-            Console.WriteLine("Add a new company...");
-            var result = companyClient.AddCompany(new Company
+            try
             {
-                Name = string.Format("New Company #{0}", nextId)
-            });
-            WriteStatusCodeResult(result);
+                // Pass in the credentials and retrieve a token dictionary:
+                _tokenDictionary =
+                    await provider.GetTokenDictionary("john@example.com", "password");
+                _accessToken = _tokenDictionary["access_token"];
 
-            Console.WriteLine("Updated List after Add:");
-            companies = companyClient.GetCompanies();
-            WriteCompaniesList(companies);
+                // Write the contents of the dictionary:
+                foreach (var kvp in _tokenDictionary)
+                {
+                    Console.WriteLine("{0}: {1}", kvp.Key, kvp.Value);
+                    Console.WriteLine("");
+                }
 
-            Console.WriteLine("Update a company...");
-            var updateMe = companyClient.GetCompany(nextId);
-            updateMe.Name = string.Format("Updated company #{0}", updateMe.Id);
-            result = companyClient.UpdateCompany(updateMe);
-            WriteStatusCodeResult(result);
+                // Create a company client instance:
+                var baseUri = new Uri(hostUriString);
+                var companyClient = new CompanyClient(baseUri, _accessToken);
 
-            Console.WriteLine("Updated List after Update:");
-            companies = companyClient.GetCompanies();
-            WriteCompaniesList(companies);
+                // Read initial companies:
+                Console.WriteLine("Read all the companies...");
+                var companies = await companyClient.GetCompaniesAsync();
+                WriteCompaniesList(companies);
 
-            Console.WriteLine("Delete a company...");
-            result = companyClient.DeleteCompany(nextId - 1);
-            WriteStatusCodeResult(result);
+                int nextId = (from c in companies select c.Id).Max() + 1;
 
-            Console.WriteLine("Updated List after Delete:");
-            companies = companyClient.GetCompanies();
-            WriteCompaniesList(companies);
+                Console.WriteLine("Add a new company...");
+                var result = await companyClient.AddCompanyAsync(
+                    new Company { Name = string.Format("New Company #{0}", nextId) });
+                WriteStatusCodeResult(result);
 
-            Console.Read();
+                Console.WriteLine("Updated List after Add:");
+                companies = await companyClient.GetCompaniesAsync();
+                WriteCompaniesList(companies);
+
+                Console.WriteLine("Update a company...");
+                var updateMe = await companyClient.GetCompanyAsync(nextId);
+                updateMe.Name = string.Format("Updated company #{0}", updateMe.Id);
+                result = await companyClient.UpdateCompanyAsync(updateMe);
+                WriteStatusCodeResult(result);
+
+                Console.WriteLine("Updated List after Update:");
+                companies = await companyClient.GetCompaniesAsync();
+                WriteCompaniesList(companies);
+
+                Console.WriteLine("Delete a company...");
+                result = await companyClient.DeleteCompanyAsync(nextId - 1);
+                WriteStatusCodeResult(result);
+
+                Console.WriteLine("Updated List after Delete:");
+                companies = await companyClient.GetCompaniesAsync();
+                WriteCompaniesList(companies);
+            }
+            catch (AggregateException ex)
+            {
+                // If it's an aggregate exception, an async error occurred:
+                Console.WriteLine(ex.InnerExceptions[0].Message);
+                Console.WriteLine("Press the Enter key to Exit...");
+                Console.ReadLine();
+                return;
+            }
+            catch (Exception ex)
+            {
+                // Something else happened:
+                Console.WriteLine(ex.Message);
+                Console.WriteLine("Press the Enter key to Exit...");
+                Console.ReadLine();
+                return;
+            }
         }
 
         private static void WriteCompaniesList(IEnumerable<Company> companies)
