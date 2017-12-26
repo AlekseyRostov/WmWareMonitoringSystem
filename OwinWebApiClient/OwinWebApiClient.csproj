@@ -51,8 +51,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiClientProvider.cs" />
-    <Compile Include="CompanyClient.cs" />
+    <Compile Include="ApiClients\ApiClientProvider.cs" />
+    <Compile Include="ApiClients\CompanyClient.cs" />
+    <Compile Include="ApiClients\VirtualMachineClient.cs" />
+    <Compile Include="Helper\FormatHelper.cs" />
     <Compile Include="Model\Company.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -60,6 +62,12 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{5e481c83-dc28-433b-8a2c-2d162271268b}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

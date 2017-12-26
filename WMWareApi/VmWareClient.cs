@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using VMware.Vim;
@@ -7,7 +8,7 @@ using WMWareApi.Model;
 
 namespace WMWareApi
 {
-    public class WMWareService
+    public class VmWareClient
     {
         private readonly string _serviceUrl;
         private readonly string _userName;
@@ -15,12 +16,13 @@ namespace WMWareApi
 
         private readonly VimClient _client;
 
-        public WMWareService(string serviceUrl, string userName, string password)
+        public VmWareClient(string serviceUrl, string userName, string password)
         {
             _serviceUrl = serviceUrl;
             _userName = userName;
             _password = password;
             _client = new VimClientImpl();
+            // отключаем на время разработки
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
         }
 
@@ -51,7 +53,7 @@ namespace WMWareApi
         {
             return _client.FindEntityViews(typeof(VirtualMachine), null, null, null);
         }
-
+        
         public VirtualMachineInfo GetVirtualMachineInfo(string vmName)
         {
             try
@@ -60,12 +62,20 @@ namespace WMWareApi
                 VirtualMachine vm = GetVirtualMachineByName(vmName);
                 if(vm == null) throw new ArgumentNullException("VM not found");
 
-                //HostSystem host = (HostSystem) _client.GetView(vm.Runtime.Host, null);
-                //var xx = host.Config.FileSystemVolume;
+                //if (vm.Guest?.Disk == null)
+                //{
+                //    HostSystem host = (HostSystem) _client.GetView(vm.Runtime.Host, null);
+                //    vm.SuspendVM();
+
+                //    vm = GetVirtualMachineByName(vmName);
+                //    if (vm == null) throw new ArgumentNullException("VM not found");
+                //}
+
 
                 VirtualMachineInfo vmInfo = new VirtualMachineInfo();
                 vmInfo.Name = vm.Name;
                 vmInfo.VirtualDisks = new List<VirtualDiskInfo>();
+                vmInfo.CdDisks = new List<CdDiskInfo>();
 
                 if (vm.Guest?.Disk != null)
                     foreach (GuestDiskInfo diskInfo in vm.Guest?.Disk)

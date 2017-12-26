@@ -30,7 +30,7 @@ namespace DemoClient
         {
             try
             {
-                WMWareService service = new WMWareService(serviceUrl, userName, password);
+                VmWareClient service = new VmWareClient(serviceUrl, userName, password);
                 List<string> vms = service.GetVirtualMachines();
                 VirtualMachineInfo vmInfo = service.GetVirtualMachineInfo(vms.SingleOrDefault());
             }

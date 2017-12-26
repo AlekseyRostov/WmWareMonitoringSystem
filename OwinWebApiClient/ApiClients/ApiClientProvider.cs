@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace OwinWebApiClient
+namespace OwinWebApiClient.ApiClients
 {
     public class ApiClientProvider
     {
@@ -44,8 +44,7 @@ namespace OwinWebApiClient
             return GetTokenDictionary(responseContent);
         }
 
-        private Dictionary<string, string> GetTokenDictionary(
-            string responseContent)
+        private Dictionary<string, string> GetTokenDictionary(string responseContent)
         {
             var tokenDictionary =
                 JsonConvert.DeserializeObject<Dictionary<string, string>>(
