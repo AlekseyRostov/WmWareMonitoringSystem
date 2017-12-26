@@ -10,13 +10,9 @@ namespace OwinWebApiSelfHost.Model
         // A default Constructor:
         public ApplicationUser()
         {
-        }
+        }   
 
-        public ApplicationUser(string email) : base(email)
-        {
-            // Use the email for both user name AND email:
-            UserName = email;
-        }
+       
     }
 
 

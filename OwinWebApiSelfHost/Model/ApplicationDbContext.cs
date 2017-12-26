@@ -13,8 +13,7 @@ namespace OwinWebApiSelfHost.Model
 
         static ApplicationDbContext()
         {
-            Database.SetInitializer(
-                new ApplicationDbInitializer());
+            //Database.SetInitializer(new ApplicationDbInitializer());
         }
 
 
@@ -31,8 +30,7 @@ namespace OwinWebApiSelfHost.Model
     }
 
 
-    public class ApplicationDbInitializer
-        : DropCreateDatabaseAlways<ApplicationDbContext>
+    public class ApplicationDbInitializer: DropCreateDatabaseAlways<ApplicationDbContext>
     {
         protected async override void Seed(ApplicationDbContext context)
         {
@@ -54,8 +52,7 @@ namespace OwinWebApiSelfHost.Model
             };
 
             // Introducing...the UserManager:
-            var manager = new UserManager<ApplicationUser>(
-                new UserStore<ApplicationUser>(context));
+            var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
 
             var result1 = await manager.CreateAsync(john, "JohnsPassword");
             var result2 = await manager.CreateAsync(jimi, "JimisPassword");

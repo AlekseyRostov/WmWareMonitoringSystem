@@ -30,7 +30,7 @@ namespace OwinWebApiSelfHost
                 Provider = new ApplicationOAuthServerProvider(),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
 
-                // Only do this for demo!!
+                // Only do this for demo!!  
                 AllowInsecureHttp = true
             };
             app.UseOAuthAuthorizationServer(OAuthOptions);
