@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using VMware.Vim;
 using WMWareApi.Model;
 
@@ -16,6 +17,8 @@ namespace WMWareApi
 
         private readonly VimClient _client;
 
+        public UserSession UserSession { get; private set; }
+
         public VmWareClient(string serviceUrl, string userName, string password)
         {
             _serviceUrl = serviceUrl;
@@ -25,7 +28,7 @@ namespace WMWareApi
             // отключаем на время разработки
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
         }
-
+        
         public List<string> GetVirtualMachines()
         {
             try
@@ -46,12 +49,18 @@ namespace WMWareApi
             // connect to vSphere web service
             _client.Connect(_serviceUrl);
             // Login using username/_password credentials
-            _client.Login(_userName, _password);            
+            UserSession = _client.Login(_userName, _password);            
         }
 
         private List<EntityViewBase> GetAllVirtualMachines()
         {
             return _client.FindEntityViews(typeof(VirtualMachine), null, null, null);
+        }
+        
+        private List<EntityViewBase> GetAllVirtualMachineByName(string name)
+        {
+            var filter = new NameValueCollection { { "name", $"^{Regex.Escape(name)}$" } };
+            return _client.FindEntityViews(typeof(VirtualMachine), null, filter, null);
         }
         
         public VirtualMachineInfo GetVirtualMachineInfo(string vmName)
@@ -103,10 +112,8 @@ namespace WMWareApi
 
         private VirtualMachine GetVirtualMachineByName(string vmName)
         {
-            List<EntityViewBase> vmList = GetAllVirtualMachines();
-            return vmList?.Where(x => ((VirtualMachine)x).Name == vmName)
-                          .Select(x => (VirtualMachine)x)
-                          .FirstOrDefault();
+            List<EntityViewBase> vmList = GetAllVirtualMachineByName(vmName);
+            return vmList?.Select(x => (VirtualMachine)x).FirstOrDefault();
         }
 
         //public VmWareInfo GetVirtualMachineInfo(string vmName)
