@@ -55,6 +55,7 @@
     <Compile Include="ApiClients\CompanyClient.cs" />
     <Compile Include="ApiClients\VirtualMachineClient.cs" />
     <Compile Include="Helper\FormatHelper.cs" />
+    <Compile Include="Helper\ObjectExtensions.cs" />
     <Compile Include="Model\Company.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

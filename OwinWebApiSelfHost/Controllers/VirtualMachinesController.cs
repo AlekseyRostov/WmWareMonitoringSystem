@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
+using OwinWebApiSelfHost.Model;
 using WMWareApi;
 using WMWareApi.Model;
 
@@ -14,16 +15,16 @@ namespace OwinWebApiSelfHost.Controllers
 
         private VmWareClient _vmWareClient = null;
         
-        // GET: api/VirtualMachines
-        public IHttpActionResult GetVirtualMachines()
+        [Route("api/VirtualMachines")]
+        public IHttpActionResult GetVirtualMachines(VmRequestInfo vm)
         {
             _vmWareClient = new VmWareClient(serviceUrl, userName, password);
             List<string> virtualMachines = _vmWareClient.GetVirtualMachines();
             return Ok(virtualMachines);
         }
 
-        // GET: api/VirtualMachines/5
-        public IHttpActionResult GetVirtualMachines(string id)
+        [Route("api/VirtualMachines/{vm.name}")]
+        public IHttpActionResult GetVirtualMachineInfo(VmRequestInfo vm)
         {
             _vmWareClient = new VmWareClient(serviceUrl, userName, password);
             VirtualMachineInfo vmInfo = _vmWareClient.GetVirtualMachineInfo(id);

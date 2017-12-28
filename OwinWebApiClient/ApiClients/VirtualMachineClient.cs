@@ -24,14 +24,20 @@ namespace OwinWebApiClient.ApiClients
             client.DefaultRequestHeaders.Authorization
                 = new AuthenticationHeaderValue("Bearer", _accessToken);
         }
-
+        
         public async Task<List<string>> GetVirtualMachinesAsync()
         {
             HttpResponseMessage response;
             using (var client = new HttpClient())
             {
                 SetClientAuthentication(client);
-                response = await client.GetAsync(_baseRequestUri);
+                var requestInfo = new
+                {
+                    Url = @"https://192.168.1.69/sdk",
+                    Login = "root",
+                    Password = "P@ssw0rd"
+                };
+                response = await client.GetAsync(new Uri(_baseRequestUri, Newtonsoft.Json.Serialization));
             }
             return await response.Content.ReadAsAsync<List<string>>();
         }

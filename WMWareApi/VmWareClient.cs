@@ -49,7 +49,7 @@ namespace WMWareApi
             // connect to vSphere web service
             _client.Connect(_serviceUrl);
             // Login using username/_password credentials
-            UserSession = _client.Login(_userName, _password);            
+            _client.Login(_userName, _password);            
         }
 
         private List<EntityViewBase> GetAllVirtualMachines()
@@ -70,17 +70,7 @@ namespace WMWareApi
                 Connect();
                 VirtualMachine vm = GetVirtualMachineByName(vmName);
                 if(vm == null) throw new ArgumentNullException("VM not found");
-
-                //if (vm.Guest?.Disk == null)
-                //{
-                //    HostSystem host = (HostSystem) _client.GetView(vm.Runtime.Host, null);
-                //    vm.SuspendVM();
-
-                //    vm = GetVirtualMachineByName(vmName);
-                //    if (vm == null) throw new ArgumentNullException("VM not found");
-                //}
-
-
+                
                 VirtualMachineInfo vmInfo = new VirtualMachineInfo();
                 vmInfo.Name = vm.Name;
                 vmInfo.VirtualDisks = new List<VirtualDiskInfo>();

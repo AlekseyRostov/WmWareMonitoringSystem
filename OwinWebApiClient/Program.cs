@@ -59,9 +59,10 @@ namespace OwinWebApiClient
                 // Read initial companies:
                 Console.WriteLine("Read all the virtual machines...");
                 var vms = await vmClient.GetVirtualMachinesAsync();
-                WriteVmList(vms);
+                //WriteVmList(vms);
 
                 string vm = vms.First();
+                //string vm = vms.First();
                 Console.WriteLine($"Read the virtual machine {vm} info...");
                 var vmInfo = await vmClient.GetVirtualMachineAsync(vm);
                 WriteVmInfo(vmInfo);                
