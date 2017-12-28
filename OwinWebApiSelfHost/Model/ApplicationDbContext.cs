@@ -13,7 +13,7 @@ namespace OwinWebApiSelfHost.Model
 
         static ApplicationDbContext()
         {
-            //Database.SetInitializer(new ApplicationDbInitializer());
+            Database.SetInitializer(new ApplicationDbInitializer());
         }
 
 
@@ -32,44 +32,33 @@ namespace OwinWebApiSelfHost.Model
 
     public class ApplicationDbInitializer: DropCreateDatabaseAlways<ApplicationDbContext>
     {
-        protected async override void Seed(ApplicationDbContext context)
-        {
-            context.Companies.Add(new Company { Name = "Microsoft" });
-            context.Companies.Add(new Company { Name = "Apple" });
-            context.Companies.Add(new Company { Name = "Google" });
-            context.SaveChanges();
-
+        protected override async void Seed(ApplicationDbContext context)
+        {           
             // Set up two initial users with different role claims:
-            var john = new ApplicationUser
+            var admin = new ApplicationUser
             {
-                Email = "john@example.com",
-                UserName = "john@example.com"
+                Email = "admin@example.com",
+                UserName = "admin"
             };
-            var jimi = new ApplicationUser
+            var user = new ApplicationUser
             {
-                Email = "jimi@Example.com",
-                UserName = "jimi@example.com"
+                Email = "user@example.com",
+                UserName = "user"
             };
 
             // Introducing...the UserManager:
             var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
 
-            var result1 = await manager.CreateAsync(john, "JohnsPassword");
-            var result2 = await manager.CreateAsync(jimi, "JimisPassword");
+            var result1 = await manager.CreateAsync(admin, "AdminPassword");
+            var result2 = await manager.CreateAsync(user, "UserPassword");
 
             // Add claims for user #1:
-            await manager.AddClaimAsync(john.Id,
-                new Claim(ClaimTypes.Name, "john@example.com"));
-
-            await manager.AddClaimAsync(john.Id,
-                new Claim(ClaimTypes.Role, "Admin"));
+            await manager.AddClaimAsync(admin.Id, new Claim(ClaimTypes.Name, admin.UserName));
+            await manager.AddClaimAsync(admin.Id, new Claim(ClaimTypes.Role, "Admin"));
 
             // Add claims for User #2:
-            await manager.AddClaimAsync(jimi.Id,
-                new Claim(ClaimTypes.Name, "jimi@example.com"));
-
-            await manager.AddClaimAsync(jimi.Id,
-                new Claim(ClaimTypes.Role, "User"));
+            await manager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Name, user.UserName));
+            await manager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "User"));
         }
     }
 }

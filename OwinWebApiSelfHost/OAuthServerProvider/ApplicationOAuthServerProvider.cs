@@ -28,8 +28,7 @@ namespace OwinWebApiSelfHost.OAuthServerProvider
             var user = await manager.FindAsync(context.UserName, context.Password);
             if (user == null)
             {
-                context.SetError(
-                    "invalid_grant", "The user name or password is incorrect.");
+                context.SetError("invalid_grant", "The user name or password is incorrect.");
                 context.Rejected();
                 return;
             }

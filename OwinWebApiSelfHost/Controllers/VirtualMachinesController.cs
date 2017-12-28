@@ -9,22 +9,22 @@ namespace OwinWebApiSelfHost.Controllers
     [Authorize(Roles = "Admin")]
     public class VirtualMachinesController : ApiController
     {
-        const string serviceUrl = @"https://192.168.1.69/sdk";
+        const string serviceUrl = @"https://192.168.75.195/sdk";
         const string userName = "root";
         const string password = "P@ssw0rd";
 
         private VmWareClient _vmWareClient = null;
-        
-        [Route("api/VirtualMachines")]
-        public IHttpActionResult GetVirtualMachines(VmRequestInfo vm)
+
+        // GET api/VirtualMachines
+        public IHttpActionResult GetVirtualMachines()
         {
             _vmWareClient = new VmWareClient(serviceUrl, userName, password);
             List<string> virtualMachines = _vmWareClient.GetVirtualMachines();
             return Ok(virtualMachines);
         }
 
-        [Route("api/VirtualMachines/{vm.name}")]
-        public IHttpActionResult GetVirtualMachineInfo(VmRequestInfo vm)
+        // GET api/VirtualMachines/name
+        public IHttpActionResult GetVirtualMachineInfo(string id)
         {
             _vmWareClient = new VmWareClient(serviceUrl, userName, password);
             VirtualMachineInfo vmInfo = _vmWareClient.GetVirtualMachineInfo(id);

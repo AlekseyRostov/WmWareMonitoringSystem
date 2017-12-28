@@ -40,7 +40,7 @@ namespace OwinWebApiClient
             try
             {
                 // Pass in the credentials and retrieve a token dictionary:
-                _tokenDictionary = await provider.GetTokenDictionary("john@example.com", "JohnsPassword");
+                _tokenDictionary = await provider.GetTokenDictionary("admin", "AdminPassword");
                 _accessToken = _tokenDictionary["access_token"];
                 /*_tokenDictionary = await provider.GetTokenDictionary("jimi@example.com", "JimisPassword");
                 _accessToken = _tokenDictionary["access_token"];*/

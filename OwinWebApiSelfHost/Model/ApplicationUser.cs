@@ -7,12 +7,9 @@ namespace OwinWebApiSelfHost.Model
 {
     public class ApplicationUser : IdentityUser
     {
-        // A default Constructor:
         public ApplicationUser()
         {
-        }   
-
-       
+        }           
     }
 
 

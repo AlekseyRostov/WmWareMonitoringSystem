@@ -31,13 +31,13 @@ namespace OwinWebApiClient.ApiClients
             using (var client = new HttpClient())
             {
                 SetClientAuthentication(client);
-                var requestInfo = new
-                {
-                    Url = @"https://192.168.1.69/sdk",
-                    Login = "root",
-                    Password = "P@ssw0rd"
-                };
-                response = await client.GetAsync(new Uri(_baseRequestUri, Newtonsoft.Json.Serialization));
+                //var requestInfo = new
+                //{
+                //    Url = @"https://192.168.1.69/sdk",
+                //    Login = "root",
+                //    Password = "P@ssw0rd"
+                //};
+                response = await client.GetAsync(_baseRequestUri);
             }
             return await response.Content.ReadAsAsync<List<string>>();
         }
