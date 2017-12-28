@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace OwinWebApiClient.ApiClients
 {
@@ -22,7 +21,6 @@ namespace OwinWebApiClient.ApiClients
 
         public async Task<string> GetSessionId(string url, string userName, string password)
         {
-            HttpResponseMessage response;
             CookieContainer cookies = new CookieContainer();
             HttpClientHandler handler = new HttpClientHandler();
             handler.CookieContainer = cookies;
@@ -38,7 +36,7 @@ namespace OwinWebApiClient.ApiClients
             {
                 var cookieEndpoint = new Uri(_baseUri, "api/vSphereAccount/Register");
                 SetClientAuthentication(client);
-                response = await client.PostAsJsonAsync(cookieEndpoint, content);
+                await client.PostAsJsonAsync(cookieEndpoint, content);
                 responseCookies = cookies.GetCookies(cookieEndpoint).Cast<Cookie>();
             }
 
@@ -55,8 +53,7 @@ namespace OwinWebApiClient.ApiClients
 
         private void SetClientAuthentication(HttpClient client)
         {
-            client.DefaultRequestHeaders.Authorization
-                = new AuthenticationHeaderValue("Bearer", _accessToken);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
         }
         
     }

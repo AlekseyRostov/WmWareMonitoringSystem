@@ -35,7 +35,7 @@ namespace OwinWebApiClient.ApiClients
             var responseContent = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception(string.Format("Error: {0}", responseContent));
+                throw new Exception($"Error: {responseContent}");
             }
 
             return GetTokenDictionary(responseContent);

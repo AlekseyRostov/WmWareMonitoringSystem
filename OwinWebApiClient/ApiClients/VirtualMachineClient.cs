@@ -10,13 +10,14 @@ namespace OwinWebApiClient.ApiClients
 {
     public class VirtualMachineClient
     {
-        private readonly string _accessToken;
-        private readonly Uri _baseRequestUri;
-        private string _vSphereUrl;
-        private string _vSphereSessionId;
-
         private static string VSphereUrlCookie = "vSphereServiceUrl";
         private static string VSphereSessionIdCookie = "vSphereSessionId";
+
+        private readonly string _accessToken;
+        private readonly Uri _baseRequestUri;
+        private readonly string _vSphereUrl;
+        private readonly string _vSphereSessionId;
+        
 
         public VirtualMachineClient(Uri baseUri, string accessToken, string vSphereUrl, string vSphereSessionId)
         {

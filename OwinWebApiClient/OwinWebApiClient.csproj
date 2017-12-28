@@ -52,12 +52,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiClients\ApiClientProvider.cs" />
-    <Compile Include="ApiClients\CompanyClient.cs" />
     <Compile Include="ApiClients\VirtualMachineClient.cs" />
     <Compile Include="ApiClients\VSphereClientProvider.cs" />
     <Compile Include="Helper\FormatHelper.cs" />
     <Compile Include="Helper\ObjectExtensions.cs" />
-    <Compile Include="Model\Company.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -70,6 +68,9 @@
       <Project>{5e481c83-dc28-433b-8a2c-2d162271268b}</Project>
       <Name>Model</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
