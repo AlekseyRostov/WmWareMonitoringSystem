@@ -45,7 +45,6 @@
   <ItemGroup>
     <Compile Include="Model\CdDiskInfo.cs" />
     <Compile Include="Model\DatastoreInfo.cs" />
-    <Compile Include="Model\Helper.cs" />
     <Compile Include="Model\VirtualDiskInfo.cs" />
     <Compile Include="Model\VirtualMachineInfo.cs" />
     <Compile Include="Model\VmWareInfo.cs" />
