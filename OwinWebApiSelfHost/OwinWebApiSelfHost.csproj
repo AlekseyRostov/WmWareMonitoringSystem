@@ -116,15 +116,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\CompaniesController.cs" />
     <Compile Include="Controllers\VirtualMachinesController.cs" />
     <Compile Include="Controllers\VSphereAccountController.cs" />
     <Compile Include="Helpers\ObjectExtensions.cs" />
     <Compile Include="Model\ApplicationDbContext.cs" />
     <Compile Include="Model\ApplicationUser.cs" />
-    <Compile Include="Model\Company.cs" />
     <Compile Include="Model\VmAccountBindingModels.cs" />
-    <Compile Include="Model\VmRequestInfo.cs" />
     <Compile Include="OAuthServerProvider\ApplicationOAuthServerProvider.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -15,18 +15,11 @@ namespace OwinWebApiSelfHost.Model
         {
             Database.SetInitializer(new ApplicationDbInitializer());
         }
-
-
-        // Add a static Create() method:
+        
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
         }
-
-
-        // We still need a DbSet for our Companies 
-        // (and any other domain objects):
-        public IDbSet<Company> Companies { get; set; }
     }
 
 

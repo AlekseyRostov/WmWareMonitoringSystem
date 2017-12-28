@@ -16,25 +16,27 @@ namespace WMWareApi
         private readonly string _password;
         private readonly string _sessionId;
         private readonly VimClient _client;
-        
 
-        public VmWareClient(string serviceUrl, string sessionId)
+        private VmWareClient()
         {
-            _serviceUrl = serviceUrl;
-            _sessionId = sessionId;
             _client = new VimClientImpl();
             // отключаем на время разработки
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
         }
 
-        public VmWareClient(string serviceUrl, string userName, string password)
+
+        public VmWareClient(string serviceUrl, string sessionId) : this()
+        {
+            _serviceUrl = serviceUrl;
+            _sessionId = sessionId;
+            
+        }
+
+        public VmWareClient(string serviceUrl, string userName, string password):this()
         {
             _serviceUrl = serviceUrl;
             _userName = userName;
-            _password = password;
-            _client = new VimClientImpl();
-            // отключаем на время разработки
-            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+            _password = password;           
         }
         
         public List<string> GetVirtualMachines()
@@ -47,7 +49,7 @@ namespace WMWareApi
 
         public string Connect()
         {
-            // connect to vSphere web service
+            // connect to vSphere service
             _client.Connect(_serviceUrl);
             // Login using username/_password credentials
             _client.Login(_userName, _password);

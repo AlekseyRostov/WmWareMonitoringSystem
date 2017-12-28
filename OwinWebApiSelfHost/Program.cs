@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Owin.Hosting;
 using OwinWebApiSelfHost.Model;
 
@@ -13,14 +9,7 @@ namespace OwinWebApiSelfHost
     {
         static void Main(string[] args)
         {
-            try
-            {
-                Run();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            Run();
         }
 
         private static void Run()
@@ -29,8 +18,7 @@ namespace OwinWebApiSelfHost
             Console.WriteLine("Initializing and seeding database...");
             Database.SetInitializer(new ApplicationDbInitializer());
             var db = new ApplicationDbContext();
-            int count = db.Companies.Count();
-            Console.WriteLine("Initializing and seeding database with {0} company records...", count);
+            Console.WriteLine("Initializing and seeding database...");
 
             // Specify the URI to use for the local host:
             string baseUri = "http://localhost:8080";

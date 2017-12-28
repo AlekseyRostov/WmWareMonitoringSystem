@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
-using OwinWebApiSelfHost.Model;
 using WMWareApi;
 using WMWareApi.Model;
 
@@ -13,11 +12,7 @@ namespace OwinWebApiSelfHost.Controllers
     [Authorize(Roles = "Admin")]
     public class VirtualMachinesController : ApiController
     {
-        //const string serviceUrl = @"https://192.168.75.195/sdk";
-        //const string userName = "root";
-        //const string password = "P@ssw0rd";
-
-        private VmWareClient _vmWareClient = null;
+        private VmWareClient _vmWareClient;
 
         private string GetCookie(string name)
         {
