@@ -42,9 +42,7 @@ namespace OwinWebApiClient
                 // Pass in the credentials and retrieve a token dictionary:
                 _tokenDictionary = await provider.GetTokenDictionary("admin", "AdminPassword");
                 _accessToken = _tokenDictionary["access_token"];
-                /*_tokenDictionary = await provider.GetTokenDictionary("jimi@example.com", "JimisPassword");
-                _accessToken = _tokenDictionary["access_token"];*/
-
+                
                 // Write the contents of the dictionary:
                 foreach (var kvp in _tokenDictionary)
                 {
@@ -52,9 +50,12 @@ namespace OwinWebApiClient
                     Console.WriteLine("");
                 }
 
-                // Create a company client instance:
                 var baseUri = new Uri(hostUriString);
-                var vmClient = new VirtualMachineClient(baseUri, _accessToken);
+                var vSpherePovider = new VSphereClientProvider(baseUri, _accessToken);
+                string vSphereSessionId = await vSpherePovider.GetSessionId(@"https://192.168.75.195/sdk", "root", "P@ssw0rd");
+
+                // Create a company client instance:
+                var vmClient = new VirtualMachineClient(baseUri, _accessToken, vSphereSessionId);
 
                 // Read initial companies:
                 Console.WriteLine("Read all the virtual machines...");
@@ -62,7 +63,6 @@ namespace OwinWebApiClient
                 //WriteVmList(vms);
 
                 string vm = vms.First();
-                //string vm = vms.First();
                 Console.WriteLine($"Read the virtual machine {vm} info...");
                 var vmInfo = await vmClient.GetVirtualMachineAsync(vm);
                 WriteVmInfo(vmInfo);                

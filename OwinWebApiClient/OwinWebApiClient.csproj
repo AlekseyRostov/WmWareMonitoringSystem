@@ -54,6 +54,7 @@
     <Compile Include="ApiClients\ApiClientProvider.cs" />
     <Compile Include="ApiClients\CompanyClient.cs" />
     <Compile Include="ApiClients\VirtualMachineClient.cs" />
+    <Compile Include="ApiClients\VSphereClientProvider.cs" />
     <Compile Include="Helper\FormatHelper.cs" />
     <Compile Include="Helper\ObjectExtensions.cs" />
     <Compile Include="Model\Company.cs" />

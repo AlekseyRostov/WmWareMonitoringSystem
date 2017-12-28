@@ -40,16 +40,17 @@ namespace WMWareApi
             }
             finally
             {
-                _client.Disconnect();
+                //_client.Disconnect();
             }
         }
 
-        private void Connect()
+        public string Connect()
         {
             // connect to vSphere web service
             _client.Connect(_serviceUrl);
             // Login using username/_password credentials
-            _client.Login(_userName, _password);            
+            _client.Login(_userName, _password);
+            return _client.SessionSecret;
         }
 
         private List<EntityViewBase> GetAllVirtualMachines()
@@ -96,7 +97,7 @@ namespace WMWareApi
             }
             finally
             {
-                _client.Disconnect();
+                //_client.Disconnect();
             }
         }
 

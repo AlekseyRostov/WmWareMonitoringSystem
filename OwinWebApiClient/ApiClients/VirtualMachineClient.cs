@@ -11,11 +11,13 @@ namespace OwinWebApiClient.ApiClients
     {
         private readonly string _accessToken;
         private readonly Uri _baseRequestUri;
+        private string _vSphereSessionId;
 
-        public VirtualMachineClient(Uri baseUri, string accessToken)
+        public VirtualMachineClient(Uri baseUri, string accessToken, string vSphereSessionId)
         {
             _accessToken = accessToken;
             _baseRequestUri = new Uri(baseUri, "api/VirtualMachines/");
+            _vSphereSessionId = vSphereSessionId;
         }
 
         // Handy helper method to set the access token for each request:
@@ -31,12 +33,6 @@ namespace OwinWebApiClient.ApiClients
             using (var client = new HttpClient())
             {
                 SetClientAuthentication(client);
-                //var requestInfo = new
-                //{
-                //    Url = @"https://192.168.1.69/sdk",
-                //    Login = "root",
-                //    Password = "P@ssw0rd"
-                //};
                 response = await client.GetAsync(_baseRequestUri);
             }
             return await response.Content.ReadAsAsync<List<string>>();

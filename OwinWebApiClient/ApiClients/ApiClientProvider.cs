@@ -14,11 +14,8 @@ namespace OwinWebApiClient.ApiClients
         {
             _hostUri = hostUri;
         }
-
-        public string AccessToken { get; private set; }
-
-        public async Task<Dictionary<string, string>> GetTokenDictionary(
-            string userName, string password)
+        
+        public async Task<Dictionary<string, string>> GetTokenDictionary(string userName, string password)
         {
             HttpResponseMessage response;
             var pairs = new List<KeyValuePair<string, string>>
@@ -47,8 +44,7 @@ namespace OwinWebApiClient.ApiClients
         private Dictionary<string, string> GetTokenDictionary(string responseContent)
         {
             var tokenDictionary =
-                JsonConvert.DeserializeObject<Dictionary<string, string>>(
-                    responseContent);
+                JsonConvert.DeserializeObject<Dictionary<string, string>>(responseContent);
             return tokenDictionary;
         }
     }
