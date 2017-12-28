@@ -58,11 +58,6 @@ namespace OwinWebApiClient.ApiClients
             client.DefaultRequestHeaders.Authorization
                 = new AuthenticationHeaderValue("Bearer", _accessToken);
         }
-
-        private Dictionary<string, string> GetTokenDictionary(string responseContent)
-        {
-            var tokenDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseContent);
-            return tokenDictionary;
-        }
+        
     }
 }

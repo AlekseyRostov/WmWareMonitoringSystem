@@ -14,10 +14,18 @@ namespace WMWareApi
         private readonly string _serviceUrl;
         private readonly string _userName;
         private readonly string _password;
-
+        private readonly string _sessionId;
         private readonly VimClient _client;
+        
 
-        public UserSession UserSession { get; private set; }
+        public VmWareClient(string serviceUrl, string sessionId)
+        {
+            _serviceUrl = serviceUrl;
+            _sessionId = sessionId;
+            _client = new VimClientImpl();
+            // отключаем на время разработки
+            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+        }
 
         public VmWareClient(string serviceUrl, string userName, string password)
         {
@@ -31,17 +39,10 @@ namespace WMWareApi
         
         public List<string> GetVirtualMachines()
         {
-            try
-            {
-                Connect();
-                List<EntityViewBase> vmList = GetAllVirtualMachines();
-                List<string> vmNames = vmList?.Select(x => ((VirtualMachine) x).Name).ToList();
-                return vmNames;
-            }
-            finally
-            {
-                //_client.Disconnect();
-            }
+            ConnectToSession();
+            List<EntityViewBase> vmList = GetAllVirtualMachines();
+            List<string> vmNames = vmList?.Select(x => ((VirtualMachine)x).Name).ToList();
+            return vmNames;
         }
 
         public string Connect()
@@ -51,6 +52,11 @@ namespace WMWareApi
             // Login using username/_password credentials
             _client.Login(_userName, _password);
             return _client.SessionSecret;
+        }
+
+        private void ConnectToSession()
+        {
+            _client.ConnectToSession(_serviceUrl, _sessionId);            
         }
 
         private List<EntityViewBase> GetAllVirtualMachines()
@@ -66,39 +72,28 @@ namespace WMWareApi
         
         public VirtualMachineInfo GetVirtualMachineInfo(string vmName)
         {
-            try
-            {
-                Connect();
-                VirtualMachine vm = GetVirtualMachineByName(vmName);
-                if(vm == null) throw new ArgumentNullException("VM not found");
-                
-                VirtualMachineInfo vmInfo = new VirtualMachineInfo();
-                vmInfo.Name = vm.Name;
-                vmInfo.VirtualDisks = new List<VirtualDiskInfo>();
-                vmInfo.CdDisks = new List<CdDiskInfo>();
+            ConnectToSession();
+            VirtualMachine vm = GetVirtualMachineByName(vmName);
+            if (vm == null) throw new ArgumentNullException("VM not found");
 
-                if (vm.Guest?.Disk != null)
-                    foreach (GuestDiskInfo diskInfo in vm.Guest?.Disk)
+            VirtualMachineInfo vmInfo = new VirtualMachineInfo();
+            vmInfo.Name = vm.Name;
+            vmInfo.VirtualDisks = new List<VirtualDiskInfo>();
+            vmInfo.CdDisks = new List<CdDiskInfo>();
+
+            if (vm.Guest?.Disk != null)
+                foreach (GuestDiskInfo diskInfo in vm.Guest?.Disk)
+                {
+                    vmInfo.VirtualDisks.Add(new VirtualDiskInfo()
                     {
-                        vmInfo.VirtualDisks.Add(new VirtualDiskInfo()
-                        {
-                            Name = diskInfo.ToString(),
-                            Path = diskInfo.DiskPath,
-                            Capacity = diskInfo.Capacity,
-                            FreeSpace = diskInfo.FreeSpace
-                        });
-                    }
+                        Name = diskInfo.ToString(),
+                        Path = diskInfo.DiskPath,
+                        Capacity = diskInfo.Capacity,
+                        FreeSpace = diskInfo.FreeSpace
+                    });
+                }
 
-                return vmInfo;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-            finally
-            {
-                //_client.Disconnect();
-            }
+            return vmInfo;
         }
 
         private VirtualMachine GetVirtualMachineByName(string vmName)

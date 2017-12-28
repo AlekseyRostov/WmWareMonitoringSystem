@@ -14,6 +14,9 @@ namespace OwinWebApiSelfHost.Controllers
     [RoutePrefix("api/vSphereAccount/")]
     public class VSphereAccountController : ApiController
     {
+        public static string SessionId = "vSphereSessionId";
+        public static string ServiceUrl = "vSphereServiceUrl";
+
         [Route("Register")]
         public async Task<HttpResponseMessage> Register(VmAccountBindingModels model)
         {
@@ -27,7 +30,7 @@ namespace OwinWebApiSelfHost.Controllers
 
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
 
-            var cookie = new CookieHeaderValue("vSphereSessionId", sessionId);
+            var cookie = new CookieHeaderValue(SessionId, sessionId);
             cookie.Expires = DateTimeOffset.Now.AddDays(1);
             cookie.Domain = Request.RequestUri.Host;
             cookie.Path = "/";

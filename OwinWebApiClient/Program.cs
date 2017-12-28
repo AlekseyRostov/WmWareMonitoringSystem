@@ -52,10 +52,13 @@ namespace OwinWebApiClient
 
                 var baseUri = new Uri(hostUriString);
                 var vSpherePovider = new VSphereClientProvider(baseUri, _accessToken);
-                string vSphereSessionId = await vSpherePovider.GetSessionId(@"https://192.168.75.195/sdk", "root", "P@ssw0rd");
+                string vSphereUrl = @"https://192.168.75.195/sdk";
+                string vSphereUserName = "root";
+                string vSphereUserPassword = "P@ssw0rd";
+                string vSphereSessionId = await vSpherePovider.GetSessionId(vSphereUrl, vSphereUserName, vSphereUserPassword);
 
                 // Create a company client instance:
-                var vmClient = new VirtualMachineClient(baseUri, _accessToken, vSphereSessionId);
+                var vmClient = new VirtualMachineClient(baseUri, _accessToken, vSphereUrl, vSphereSessionId);
 
                 // Read initial companies:
                 Console.WriteLine("Read all the virtual machines...");
